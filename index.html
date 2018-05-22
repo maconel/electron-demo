@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Hello world</title>
+	<style media="screen">
+		.version {
+			color: red;
+		}
+	</style>
+</head>
+<body>
+	<h1>Hello world</h1>
+	We are using node.js
+	<span id="version-node" class="version"></span>
+	and Electron
+	<span id="version-electron" class="version"></span>
+	<script type="text/javascript">
+		console.log('process:', process);
+		var versionNode = process.version;
+		var versionElectron = process.versions['electron'];
+		document.getElementById('version-node').innerText = versionNode;
+		document.getElementById('version-electron').innerText = versionElectron;
+	</script>
+
+	<div>
+		<input type="text" id="message" name="" value="">
+		<br/>
+		<button type="button" id="button" name="button">Click me</button>
+	</div>
+
+	<script type="text/javascript">
+		var ipcRenderer = require('electron').ipcRenderer;
+		document.getElementById('button').onclick = function() {
+			var message = document.getElementById('message').value;
+			ipcRenderer.send('asynchronous-message', message);
+		}
+
+		ipcRenderer.on('asynchronous-reply', function(event, arg) {
+			alert(arg);
+		});
+
+		var remote = require('electron').remote;
+		var BrowserWindow = remote.BrowserWindow;
+		var win = new BrowserWindow({width: 200, height: 150});
+		win.loadURL('http://qq.com');
+	</script>
+</body>
+</html>
